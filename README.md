@@ -60,22 +60,22 @@ Please see [XT::Files](https://metacpan.org/pod/XT::Files) for how to configure 
 
 Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) default object. This is
 only used to initialize the other `critic_*` methods. On first access this
-is initialized to `Perl::Critic-`new()>.
+is initialized to `Perl::Critic->new()`.
 
 ## critic\_module( \[ARGS\] )
 
 Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) object used to test module
-files. On first access this is initialized to `$self-`critic()>.
+files. On first access this is initialized to `$self->critic()`.
 
 ## critic\_script( \[ARGS\] )
 
 Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) object used to test script
-files. On first access this is initialized to `$self-`critic()>.
+files. On first access this is initialized to `$self->critic()`.
 
 ## critic\_test( \[ARGS\] )
 
 Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) object used to test test
-files. On first access this is initialized to `$self-`critic()>.
+files. On first access this is initialized to `$self->critic()`.
 
 # EXAMPLES
 

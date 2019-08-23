@@ -162,22 +162,22 @@ Please see L<XT::Files> for how to configure the files to be checked.
 
 Returns, and optionally sets, the L<Perl::Critic> default object. This is
 only used to initialize the other C<critic_*> methods. On first access this
-is initialized to C<Perl::Critic->new()>.
+is initialized to C<Perl::Critic-E<gt>new()>.
 
 =head2 critic_module( [ARGS] )
 
 Returns, and optionally sets, the L<Perl::Critic> object used to test module
-files. On first access this is initialized to C<$self->critic()>.
+files. On first access this is initialized to C<$self-E<gt>critic()>.
 
 =head2 critic_script( [ARGS] )
 
 Returns, and optionally sets, the L<Perl::Critic> object used to test script
-files. On first access this is initialized to C<$self->critic()>.
+files. On first access this is initialized to C<$self-E<gt>critic()>.
 
 =head2 critic_test( [ARGS] )
 
 Returns, and optionally sets, the L<Perl::Critic> object used to test test
-files. On first access this is initialized to C<$self->critic()>.
+files. On first access this is initialized to C<$self-E<gt>critic()>.
 
 =head1 EXAMPLES
 
