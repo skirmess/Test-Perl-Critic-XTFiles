@@ -4,5 +4,5 @@
 .build
 .perlcritic_package.yml
 Test-Perl-Critic-XTFiles-*
-dzil-inc
+dzil-bundle
 tmp
