@@ -19,8 +19,8 @@ Version 0.001
 
 # DESCRIPTION
 
-Tests all the files supplied from [XT::Files](https://metacpan.org/pod/XT::Files) with [Perl::Critic](https://metacpan.org/pod/Perl::Critic). The
-output, and behavior, should be the same as from [Test::Perl::Critic](https://metacpan.org/pod/Test::Perl::Critic).
+Tests all the files supplied from [XT::Files](https://metacpan.org/pod/XT%3A%3AFiles) with [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic). The
+output, and behavior, should be the same as from [Test::Perl::Critic](https://metacpan.org/pod/Test%3A%3APerl%3A%3ACritic).
 
 # USAGE
 
@@ -38,14 +38,14 @@ The following arguments are supported:
 
 ### critic, critic\_module, critic\_script, critic\_test (optional)
 
-Sets the default [Perl::Critic](https://metacpan.org/pod/Perl::Critic) object and the objects used to test
+Sets the default [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic) object and the objects used to test
 module, script or test files. See the method with the same name for further
 explanation.
 
 ## all\_file\_ok
 
-Calls the `files` method of [Test::XTFiles](https://metacpan.org/pod/Test::XTFiles) to get all the files to
-be tested. All files are tested with the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) object configured
+Calls the `files` method of [Test::XTFiles](https://metacpan.org/pod/Test%3A%3AXTFiles) to get all the files to
+be tested. All files are tested with the [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic) object configured
 for their type.
 
 It calls `done_testing` or `skip_all` so you can't have already called
@@ -54,34 +54,34 @@ It calls `done_testing` or `skip_all` so you can't have already called
 `all_files_ok` returns something _true_ if all files test ok and _false_
 otherwise.
 
-Please see [XT::Files](https://metacpan.org/pod/XT::Files) for how to configure the files to be checked.
+Please see [XT::Files](https://metacpan.org/pod/XT%3A%3AFiles) for how to configure the files to be checked.
 
 ## critic
 
-Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) default object. This is
+Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic) default object. This is
 only used to initialize the other `critic_*` methods. On first access this
 is initialized to `Perl::Critic->new()`.
 
 ## critic\_module( \[ARGS\] )
 
-Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) object used to test module
+Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic) object used to test module
 files. On first access this is initialized to `$self->critic()`.
 
 ## critic\_script( \[ARGS\] )
 
-Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) object used to test script
+Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic) object used to test script
 files. On first access this is initialized to `$self->critic()`.
 
 ## critic\_test( \[ARGS\] )
 
-Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl::Critic) object used to test test
+Returns, and optionally sets, the [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic) object used to test test
 files. On first access this is initialized to `$self->critic()`.
 
 # EXAMPLES
 
 ## Example 1 Default usage
 
-Check all the files returned by [XT::Files](https://metacpan.org/pod/XT::Files) with [Perl::Critic](https://metacpan.org/pod/Perl::Critic).
+Check all the files returned by [XT::Files](https://metacpan.org/pod/XT%3A%3AFiles) with [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic).
 
     use 5.006;
     use strict;
@@ -119,7 +119,7 @@ file in the root directory of your distribution.
 
 # SEE ALSO
 
-[Test::More](https://metacpan.org/pod/Test::More), [Perl::Critic](https://metacpan.org/pod/Perl::Critic), [XT::Files](https://metacpan.org/pod/XT::Files)
+[Test::More](https://metacpan.org/pod/Test%3A%3AMore), [Perl::Critic](https://metacpan.org/pod/Perl%3A%3ACritic), [XT::Files](https://metacpan.org/pod/XT%3A%3AFiles)
 
 # SUPPORT
 

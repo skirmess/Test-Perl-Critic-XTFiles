@@ -1,5 +1,11 @@
 name: test
-on: push
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron:  '5 7 11 * *'
+
 jobs:
   matrix:
     runs-on: ubuntu-latest
@@ -65,7 +71,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AUTOMATED_TESTING: 1
       TAR_OPTIONS: --warning=no-unknown-keyword
 
     steps:
@@ -122,6 +127,8 @@ jobs:
       - name: cpanm --installdeps --notest --with-develop .
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest --with-develop .
         working-directory: ${{ github.event.repository.name }}
+        env:
+          AUTOMATED_TESTING: 1
 
       - name: cpanm --notest App::ReportPrereqs
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
@@ -134,6 +141,7 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - name: make
@@ -146,11 +154,13 @@ jobs:
         run: ${{ steps.make.outputs.bin }} test
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
-      - run: ${{ steps.installsitebin.outputs.path }}/prove -lr xt/author
+      - run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/prove -lr xt/author
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - uses: actions/upload-artifact@v2
@@ -169,7 +179,6 @@ jobs:
       matrix: ${{ fromJson(needs.matrix.outputs.linux) }}
 
     env:
-      AUTOMATED_TESTING: 1
       TAR_OPTIONS: --warning=no-unknown-keyword
 
     steps:
@@ -240,21 +249,14 @@ jobs:
       - name: cpanm --version
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
 
-        # Test::Simple needs PathTools 3.13
-        # PathTools needs Test::Simple 0.88
-        # Perl 5.8.1 ships with Test::Simple 0.47
-      - run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose Test::Simple@0.88
-        if: matrix.perl == '5.8.1'
-
-        # Perl::Critic -> PPI -> Clone
-        #
-        # Clone > 0.41 does not install on Perl < 5.8.8
-      - run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose Clone@0.41
-        if: matrix.perl == '5.8.1' || matrix.perl == '5.8.2' || matrix.perl == '5.8.3' || matrix.perl == '5.8.4' || matrix.perl == '5.8.5' || matrix.perl == '5.8.6' || matrix.perl == '5.8.7'
-
       - name: cpanm --installdeps --notest .
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        run: |
+          mv cpanfile .cpanfile.disabled
+          ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
+        env:
+          AUTOMATED_TESTING: 1
 
       - name: cpanm --notest App::ReportPrereqs
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
@@ -267,6 +269,7 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - name: make
@@ -279,6 +282,7 @@ jobs:
         run: ${{ steps.make.outputs.bin }} test
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - uses: actions/upload-artifact@v2
@@ -292,7 +296,6 @@ jobs:
     runs-on: macos-latest
 
     env:
-      AUTOMATED_TESTING: 1
       TAR_OPTIONS: --warning=no-unknown-keyword
 
     steps:
@@ -343,8 +346,13 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
 
       - name: cpanm --installdeps --notest .
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        run: |
+          mv cpanfile .cpanfile.disabled
+          ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
+        env:
+          AUTOMATED_TESTING: 1
 
       - name: cpanm --notest App::ReportPrereqs
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
@@ -357,6 +365,7 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - name: make
@@ -369,6 +378,7 @@ jobs:
         run: ${{ steps.make.outputs.bin }} test
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - uses: actions/upload-artifact@v2
@@ -387,7 +397,6 @@ jobs:
       matrix: ${{ fromJson(needs.matrix.outputs.macos) }}
 
     env:
-      AUTOMATED_TESTING: 1
       TAR_OPTIONS: --warning=no-unknown-keyword
 
     steps:
@@ -453,8 +462,13 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
 
       - name: cpanm --installdeps --notest .
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        run: |
+          mv cpanfile .cpanfile.disabled
+          ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
+        env:
+          AUTOMATED_TESTING: 1
 
       - name: cpanm --notest App::ReportPrereqs
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
@@ -467,6 +481,7 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - name: make
@@ -479,6 +494,7 @@ jobs:
         run: ${{ steps.make.outputs.bin }} test
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - uses: actions/upload-artifact@v2
@@ -497,7 +513,6 @@ jobs:
         platform: [ 'x86', 'x86_64' ]
 
     env:
-      AUTOMATED_TESTING: 1
       TAR_OPTIONS: --warning=no-unknown-keyword
 
     defaults:
@@ -583,9 +598,13 @@ jobs:
           PATH: /usr/local/bin:/usr/bin
 
       - name: cpanm --installdeps --notest .
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        run: |
+          mv cpanfile .cpanfile.disabled
+          ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PATH: /usr/local/bin:/usr/bin
 
       - name: cpanm --notest App::ReportPrereqs
@@ -603,6 +622,7 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PATH: /usr/local/bin:/usr/bin
           PERL_USE_UNSAFE_INC: 0
 
@@ -617,6 +637,7 @@ jobs:
         run: ${{ steps.make.outputs.bin }} test
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PATH: /usr/local/bin:/usr/bin
           PERL_USE_UNSAFE_INC: 0
 
@@ -636,7 +657,6 @@ jobs:
       matrix: ${{ fromJson(needs.matrix.outputs.strawberry) }}
 
     env:
-      AUTOMATED_TESTING: 1
       TAR_OPTIONS: --warning=no-unknown-keyword
 
     steps:
@@ -712,8 +732,13 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --version
 
       - name: cpanm --installdeps --notest .
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --verbose --installdeps --notest .
+        run: |
+          mv cpanfile .cpanfile.disabled
+          ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --verbose --installdeps --notest .
+          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
+        env:
+          AUTOMATED_TESTING: 1
 
       - name: cpanm --notest App::ReportPrereqs
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}\cpanm --verbose --notest App::ReportPrereqs
@@ -726,6 +751,7 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - name: make
@@ -738,6 +764,7 @@ jobs:
         run: ${{ steps.make.outputs.bin }} test
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - uses: actions/upload-artifact@v2
@@ -797,8 +824,8 @@ jobs:
               make
 
     env:
-      AUTOMATED_TESTING: 1
       TAR_OPTIONS: --warning=no-unknown-keyword
+      WSLENV: AUTOMATED_TESTING:PERL_USE_UNSAFE_INC:TAR_OPTIONS
 
     defaults:
       run:
@@ -865,8 +892,13 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --version
 
       - name: cpanm --installdeps --notest .
-        run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+        run: |
+          mv cpanfile .cpanfile.disabled
+          ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --installdeps --notest .
+          mv .cpanfile.disabled cpanfile
         working-directory: ${{ github.event.repository.name }}
+        env:
+          AUTOMATED_TESTING: 1
 
       - name: cpanm --notest App::ReportPrereqs
         run: ${{ steps.perl.outputs.bin }} ${{ steps.installsitebin.outputs.path }}/cpanm --verbose --notest App::ReportPrereqs
@@ -879,6 +911,7 @@ jobs:
         run: ${{ steps.perl.outputs.bin }} Makefile.PL
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - name: make
@@ -891,6 +924,7 @@ jobs:
         run: ${{ steps.make.outputs.bin }} test
         working-directory: ${{ github.event.repository.name }}
         env:
+          AUTOMATED_TESTING: 1
           PERL_USE_UNSAFE_INC: 0
 
       - uses: actions/upload-artifact@v2
